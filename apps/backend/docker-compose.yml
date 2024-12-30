@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  todo-db:
+    image: postgres:16.1-alpine
+    restart: always
+    container_name: backend-db
+    environment:
+      POSTGRES_DB: backend-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - '25432:5432'
+    volumes:
+      - ./data/db/volum:/var/lib/postgresql/data
+    networks:
+      - chat-nw
+
+networks:
+  chat-nw:
+    external: true
