@@ -1,47 +1,30 @@
 import "./App.css";
 
-import { gql, useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 
-const CREATE_USER_MUTATION = gql`
-  mutation CreateUser($auth0Id: String!, $email: String!, $name: String!) {
-    createUser(auth0Id: $auth0Id, email: $email, name: $name) {
-      id
-      auth0Id
-      email
-      name
-    }
-  }
-`;
-
-const GET_USER_BY_AUTH0_ID = gql`
-  query GetUserByAuth0Id($auth0Id: String!) {
-    getUserByAuth0Id(auth0Id: $auth0Id) {
-      id
-      auth0Id
-      email
-      name
-    }
-  }
-`;
+import {
+  CreateUserDocument,
+  GetUserByAuth0IdDocument,
+} from "./graphql/generated/graphql";
 
 function App() {
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
   const [createUserMutation, { data: createUserData }] =
-    useMutation(CREATE_USER_MUTATION);
+    useMutation(CreateUserDocument);
 
-  const [getUserByAuth0Id] = useLazyQuery(GET_USER_BY_AUTH0_ID);
+  const [getUserByAuth0Id] = useLazyQuery(GetUserByAuth0IdDocument);
 
   useEffect(() => {
     const createUser = async () => {
       if (!user) return;
-      const auth0Id = user.sub; // e.g. "auth0|abcd123..."
+      const auth0Id = user.sub!; // e.g. "auth0|abcd123..."
       const email = user.email || "";
       const name = user.name || "Unknown";
       try {
         const { data } = await getUserByAuth0Id({
-          variables: { auth0Id: user.sub },
+          variables: { auth0Id },
         });
         if (data?.getUserByAuth0Id) {
           console.log("data: ", data.getUserByAuth0Id);
