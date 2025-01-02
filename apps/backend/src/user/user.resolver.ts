@@ -15,11 +15,11 @@ export class UserResolver {
   }
 
   @Mutation(() => UserType)
-  async createUser(
+  async createUserIfNotExists(
     @Args('auth0Id') auth0Id: string,
     @Args('email') email: string,
     @Args('name') name: string,
   ): Promise<User> {
-    return this.userService.createUser(auth0Id, email, name);
+    return this.userService.createUserIfNotExists(auth0Id, email, name);
   }
 }

@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
-    "\n  mutation CreateUser($auth0Id: String!, $email: String!, $name: String!) {\n    createUser(auth0Id: $auth0Id, email: $email, name: $name) {\n      id\n      auth0Id\n      email\n      name\n    }\n  }\n": types.CreateUserDocument,
+    "\n  mutation CreateUserIfNotExists(\n    $auth0Id: String!\n    $email: String!\n    $name: String!\n  ) {\n    createUserIfNotExists(auth0Id: $auth0Id, email: $email, name: $name) {\n      id\n      auth0Id\n      email\n      name\n    }\n  }\n": types.CreateUserIfNotExistsDocument,
     "\n  query GetUserByAuth0Id($auth0Id: String!) {\n    getUserByAuth0Id(auth0Id: $auth0Id) {\n      id\n      auth0Id\n      email\n      name\n    }\n  }\n": types.GetUserByAuth0IdDocument,
 };
 
@@ -35,7 +35,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation CreateUser($auth0Id: String!, $email: String!, $name: String!) {\n    createUser(auth0Id: $auth0Id, email: $email, name: $name) {\n      id\n      auth0Id\n      email\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation CreateUser($auth0Id: String!, $email: String!, $name: String!) {\n    createUser(auth0Id: $auth0Id, email: $email, name: $name) {\n      id\n      auth0Id\n      email\n      name\n    }\n  }\n"];
+export function graphql(source: "\n  mutation CreateUserIfNotExists(\n    $auth0Id: String!\n    $email: String!\n    $name: String!\n  ) {\n    createUserIfNotExists(auth0Id: $auth0Id, email: $email, name: $name) {\n      id\n      auth0Id\n      email\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation CreateUserIfNotExists(\n    $auth0Id: String!\n    $email: String!\n    $name: String!\n  ) {\n    createUserIfNotExists(auth0Id: $auth0Id, email: $email, name: $name) {\n      id\n      auth0Id\n      email\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

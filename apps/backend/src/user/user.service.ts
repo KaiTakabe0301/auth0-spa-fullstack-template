@@ -6,7 +6,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(auth0Id: string, email: string, name: string) {
+  async createUserIfNotExists(auth0Id: string, email: string, name: string) {
+    const user = await this.findUserByAuth0Id(auth0Id);
+    if (user) return;
+
     return this.prisma.user.create({
       data: {
         auth0Id,

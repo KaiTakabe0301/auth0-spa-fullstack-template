@@ -5,14 +5,15 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 
 import {
-  CreateUserDocument,
+  CreateUserIfNotExistsDocument,
   GetUserByAuth0IdDocument,
 } from "./graphql/generated/graphql";
 
 function App() {
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
-  const [createUserMutation, { data: createUserData }] =
-    useMutation(CreateUserDocument);
+  const [createUserIfNotExistsMutation, { data: createUserData }] = useMutation(
+    CreateUserIfNotExistsDocument
+  );
 
   const [getUserByAuth0Id] = useLazyQuery(GetUserByAuth0IdDocument);
 
@@ -23,15 +24,9 @@ function App() {
       const email = user.email || "";
       const name = user.name || "Unknown";
       try {
-        const { data } = await getUserByAuth0Id({
-          variables: { auth0Id },
+        await createUserIfNotExistsMutation({
+          variables: { auth0Id, email, name },
         });
-        if (data?.getUserByAuth0Id) {
-          console.log("data: ", data.getUserByAuth0Id);
-          console.log("DBにユーザが存在します");
-        } else {
-          await createUserMutation({ variables: { auth0Id, email, name } });
-        }
       } catch (err) {
         console.error(err);
       }
@@ -39,7 +34,7 @@ function App() {
     if (!isAuthenticated) return;
 
     createUser();
-  }, [user, createUserMutation, isAuthenticated, getUserByAuth0Id]);
+  }, [user, createUserIfNotExistsMutation, isAuthenticated, getUserByAuth0Id]);
 
   return (
     <div>
@@ -55,7 +50,7 @@ function App() {
             Logout
           </button>
           {createUserData && (
-            <p>DBにユーザが作成されました: {createUserData.createUser.email}</p>
+            <p>DBにユーザが作成されました: {createUserData.createUserIfNotExists.email}</p>
           )}
         </>
       ) : (
