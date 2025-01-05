@@ -1,5 +1,3 @@
-import "./App.css";
-
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
@@ -7,9 +5,9 @@ import { useEffect } from "react";
 import {
   CreateUserIfNotExistsDocument,
   GetUserByAuth0IdDocument,
-} from "./graphql/generated/graphql";
+} from "../../../graphql/generated/graphql";
 
-function App() {
+export function LoginPage() {
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
   const [createUserIfNotExistsMutation, { data: createUserData }] = useMutation(
     CreateUserIfNotExistsDocument
@@ -50,7 +48,10 @@ function App() {
             Logout
           </button>
           {createUserData && (
-            <p>DBにユーザが作成されました: {createUserData.createUserIfNotExists.email}</p>
+            <p>
+              DBにユーザが作成されました:{" "}
+              {createUserData.createUserIfNotExists.email}
+            </p>
           )}
         </>
       ) : (
@@ -59,5 +60,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
